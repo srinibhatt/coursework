@@ -1,0 +1,51 @@
+TASK A
+Error updating inserting: duplicate key value violates unique constraint "spectator_pkey"
+CONTEXT:  PL/pgSQL function insert_spectator(integer,character,character) line 12 at RAISE
+
+TASK C
+CALL
+---Empty DataFrame
+Columns: [sno, sname, semail]
+Index: []---
+TASK D
+CALL
+---Empty DataFrame
+Columns: [ecode, edesc, elocation, edate, etime, emax]
+Index: []---
+TASK E
+---Error updating inserting: duplicate key value violates unique constraint "ticket_composite_spec_event"
+CONTEXT:  PL/pgSQL function insert_ticket(character,integer) line 14 at RAISE
+
+TASK F
+---  elocation       edate  tickets_issued
+0  Stadium1  2024-07-01               2
+1      hyd1  2023-06-06               2
+2      hyd2  2023-06-06               4
+3      hyd3  2023-06-06               1
+4      hyd4  2023-06-06               2
+5      hyd5  2023-06-06               2---
+TASK G
+---  ecode              edesc  count
+0  A101              test1      1
+1  A102              test1      4
+2  A103              test1      1
+3  A104              test1      2
+4  A105              test1      2
+5  A111              test1      1
+6  A119  100 meters sprint      1
+7  A120  100 meters sprint      1---
+TASK H
+---  ecode  edesc  count
+0  A102  test1      4---
+TASK I
+---       sname ecode       edate elocation     etime  edesc  sno
+0  somename1  A102  2023-06-06      hyd2  09:10:01  test1    2---
+TASK J
+---   tno     sname ecode cancelled_tno   case
+0    9  somename  A105          None  VALID---
+TASK K
+---   tno ecode      cdate cuser
+0    1  A102 2023-08-08  test---
+
+
+Exit program!
