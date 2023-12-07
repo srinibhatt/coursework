@@ -1,0 +1,52 @@
+insert into event values ('A100','event 1','location1','07/01/2024','14:00',10);
+insert into event values ('A101','event 2','location1','07/01/2024','14:00',10);
+insert into event values ('A103','event 3','location2','07/01/2024','14:00',10);
+insert into event values ('A104','event 4','location2','07/01/2024','14:00',10);
+insert into event values ('A105','event 5','location3','07/01/2024','14:00',10);
+insert into event values ('A106','event 6','location3','07/01/2024','14:00',10);
+insert into event values ('A107','event 7','location4','07/01/2024','14:00',10);
+insert into event values ('A108','event 8','location4','07/01/2024','14:00',10);
+insert into event values ('A109','event 9','location5','07/01/2024','14:00',10);
+insert into event values ('A110','event 10','location5','07/01/2024','14:00',10);
+
+
+insert into spectator values (1,'sname1','semail1@mail.com');
+insert into spectator values (2,'sname2','semail2@mail.com');
+insert into spectator values (3,'sname3','semail3@mail.com');
+insert into spectator values (4,'sname4','semail4@mail.com');
+insert into spectator values (5,'sname5','semail5@mail.com');
+insert into spectator values (6,'sname6','semail6@mail.com');
+insert into spectator values (7,'sname7','semail7@mail.com');
+insert into spectator values (8,'sname8','semail8@mail.com');
+insert into spectator values (9,'sname9','semail9@mail.com');
+insert into spectator values (10,'sname10','semail10@mail.com');
+
+
+call insert_ticket('A100',1)
+call insert_ticket('A101',1)
+call insert_ticket('A101',2)
+call insert_ticket('A101',3)
+call insert_ticket('A101',4)
+call insert_ticket('A101',5)
+call insert_ticket('A101',6)
+call insert_ticket('A101',7)
+call insert_ticket('A103',1)
+call insert_ticket('A103',2)
+
+call insert_ticket('A108',1)
+call insert_ticket('A108',2)
+call insert_ticket('A108',3)
+call insert_ticket('A108',4)
+call insert_ticket('A108',5)
+call insert_ticket('A108',6)
+call insert_ticket('A108',7)
+call insert_ticket('A108',8)
+
+
+insert into cancel values(18,'A108',8,current_date,'admin');
+insert into cancel values(17,'A108',7,current_date,'admin');
+insert into cancel values(16,'A108',6,current_date,'admin');
+insert into cancel values(15,'A108',5,current_date,'admin');
+insert into cancel values(14,'A108',4,current_date,'admin');
+insert into cancel values(13,'A108',3,current_date,'admin');
+insert into cancel values(12,'A108',2,current_date,'admin');

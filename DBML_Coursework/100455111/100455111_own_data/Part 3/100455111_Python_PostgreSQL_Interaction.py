@@ -1,3 +1,4 @@
+
 '''
 Before you can run this code, please do the following:
     Fill up the information in line 23 below "connStr = "host='cmpstudb-01.cmp.uea.ac.uk' dbname= '' user='' password = " + pw"

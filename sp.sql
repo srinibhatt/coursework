@@ -150,7 +150,7 @@ as $$
 DECLARE tnoVar integer;
 BEGIN
 BEGIN
-	select max(tno)+1 from ticket into tnoVar;
+	select COALESCE(MAX(tno) + 1, 1) from ticket into tnoVar;
 	insert into ticket values(tnoVar,ecodeVar,snoVar);
 	
 	RAISE NOTICE 'Total Records inserted. : % ' , 1;
@@ -169,7 +169,7 @@ select * from ticket;
 call insert_ticket('A111',1)
 
 
-CREATE VIEW cancelled_tickets_report as select c1.tno,c1.ecode,c1.cdate,c1.cuser from cancel c1 ,ticket t1,event e1 where c1.tno = t1.tno and t1.ecode = e1.ecode ;
+CREATE OR REPLACE VIEW cancelled_tickets_report as select c1.tno,c1.ecode,c1.cdate,c1.cuser from cancel c1 ,ticket t1,event e1 where c1.tno = t1.tno and t1.ecode = e1.ecode ;
 select * from cancelled_tickets_report where ecode = 'A102'
 
 
@@ -186,9 +186,10 @@ BEGIN
 	RAISE NOTICE 'spectator records deleted :' ;
 	delete from cancel;
 	RAISE NOTICE 'cancel records deleted :' ;
+	delete from ticket;
+	RAISE NOTICE 'ticket records deleted :' ;
 	
 	
-	COMMIT; 
 	EXCEPTION
         -- Rollback the transaction on error
         WHEN OTHERS THEN
@@ -196,3 +197,21 @@ BEGIN
             RAISE EXCEPTION 'Error updating deleting: %', SQLERRM;
 	
 END; $$	
+
+--views
+
+CREATE OR REPLACE VIEW total_spectator_per_date_per_location AS SELECT 
+ e1.elocation,e1.edate,count(e1.elocation) as tickets_issued from ticket t1,event e1, spectator s1 
+where t1.sno = s1.sno and t1.ecode = e1.ecode group by e1.elocation,e1.edate ;
+
+CREATE OR REPLACE VIEW total_tickets_issued_per_event AS select t1.ecode,e1.edesc,count(t1.ecode) from ticket t1,event e1 where t1.ecode = e1.ecode group by t1.ecode,e1.edesc;
+
+
+CREATE OR REPLACE VIEW report_spectator_schedule as SELECT 
+ s1.sname,e1.ecode,e1.edate,e1.elocation,e1.etime,e1.edesc from ticket t1,event e1, spectator s1 
+where t1.sno = s1.sno and t1.ecode = e1.ecode;
+
+CREATE OR REPLACE VIEW ticket_status_report as SELECT 
+ t1.tno,s1.sname,e1.ecode,c1.tno as cancelled_tno,(CASE WHEN(c1.tno is NULL ) THEN 'VALID' ELSE 'CANCELLED' END)  from ticket t1 left outer join cancel c1 on t1.tno = c1.tno,event e1, spectator s1 
+where t1.sno = s1.sno and t1.ecode = e1.ecode ; 
+ 

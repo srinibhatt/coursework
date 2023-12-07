@@ -21,14 +21,14 @@ CONTEXT:  PL/pgSQL function insert_ticket(character,integer) line 14 at RAISE
 
 TASK F
 ---   elocation       edate  tickets_issued
-0  location4  2024-07-01               8
-1  location1  2024-07-01               7
-2  location2  2024-07-01               2---
+0  location1  2024-07-01               7
+1  location2  2024-07-01               2
+2  location4  2024-07-01               8---
 TASK G
 ---  ecode    edesc  count
-0  A103  event 3      2
+0  A108  event 8      8
 1  A101  event 2      7
-2  A108  event 8      8---
+2  A103  event 3      2---
 TASK H
 ---  ecode    edesc  count
 0  A108  event 8      8---

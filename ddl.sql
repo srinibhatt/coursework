@@ -32,12 +32,12 @@ CREATE TABLE ticket (
 	CONSTRAINT ticket_composite_spec_event UNIQUE (ecode, sno),
 CONSTRAINT ticket_pkey PRIMARY KEY (tno),
     CONSTRAINT ticket_fk_ecode FOREIGN KEY (ecode)
-        REFERENCES coursework.event (ecode) 
+        REFERENCES event (ecode) 
         ON UPDATE NO ACTION
         ON DELETE CASCADE
         ,
     CONSTRAINT ticket_fk_sno FOREIGN KEY (sno)
-        REFERENCES coursework.spectator (sno) 
+        REFERENCES spectator (sno) 
         ON UPDATE NO ACTION
         ON DELETE CASCADE
         
@@ -50,21 +50,23 @@ CREATE TABLE cancel (
     cdate        TIMESTAMP NOT NULL,
     cuser        VARCHAR(128) NOT NULL, 
 CONSTRAINT cancel_fk_ecode FOREIGN KEY (ecode)
-        REFERENCES coursework.event (ecode) 
+        REFERENCES event (ecode) 
         ON UPDATE NO ACTION
         ON DELETE CASCADE,
         
     CONSTRAINT cancel_fk_sno FOREIGN KEY (sno)
-        REFERENCES coursework.spectator (sno) 
+        REFERENCES spectator (sno) 
         ON UPDATE NO ACTION
         ON DELETE CASCADE,
         
     CONSTRAINT cancel_fk_tno FOREIGN KEY (tno)
-        REFERENCES coursework.ticket (tno) 
+        REFERENCES ticket (tno) 
         ON UPDATE NO ACTION
         ON DELETE CASCADE
 
 );
+
+
 
 create or replace function is_spectator_has_valid_tickets(snoVariable int)
 returns boolean
@@ -206,3 +208,35 @@ BEGIN
 	
 	
 END; $$	
+
+
+
+
+-- FUNCTION: cancel_ticket()
+
+-- DROP FUNCTION IF EXISTS cancel_ticket();
+
+CREATE OR REPLACE FUNCTION cancel_ticket()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+
+BEGIN
+
+	INSERT INTO cancel (tno, ecode, sno, cdate, cuser)
+SELECT tno, ecode, sno, CURRENT_DATE, 'admin'
+FROM ticket
+WHERE ecode = NEW.ecode;
+	RETURN NEW;
+END;
+$BODY$;
+
+
+
+CREATE TRIGGER trg_event_upd
+    AFTER UPDATE OF elocation, edate, etime
+    ON event
+    FOR EACH ROW
+    EXECUTE FUNCTION cancel_ticket();
